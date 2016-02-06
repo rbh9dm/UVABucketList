@@ -1,0 +1,60 @@
+See a basketball game
+Description
+1
+High five Dean Groves
+Description
+0
+High Five CavMan
+Description
+1
+Have a picnic on the lawn
+Description
+0
+Receive all A's one semester
+Description
+0
+Go to Foxfield
+Description
+1
+Study all night in Clemons
+Description
+0
+Have lunch with a professor
+Description
+0
+Attend Lighting of the Lawn
+Description
+1
+Go to a student theater production
+Description
+1
+Join a club
+Description
+1
+Trick or Treat on the lawn
+Description
+0
+Visit Monticello
+Description
+1
+Have a dorm reunion
+Description
+1
+Go to an a cappella show
+Description
+0
+Be first at Bodo's
+Description
+0
+Vote in a student election
+Description
+0
+See a concert at JPJ
+Description
+0
+Get dressed up for a football game
+Description
+1
+Visit Edgar Allen Poe's room
+Description
+1
