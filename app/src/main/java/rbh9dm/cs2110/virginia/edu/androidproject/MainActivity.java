@@ -36,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
      * Array of LineItems. LineItems hold the data regarding each item on the list (i.e. name, description, whether complete)
      */
     private ArrayList<LineItem> items;
+    NewAdapter adapter;
+    ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)  {
@@ -68,16 +70,20 @@ public class MainActivity extends AppCompatActivity {
         // Sets up the adapter and listView. This displays a list based on the contents of our LineItem array
         // Note: changing the contents of the array will cause the list on the screen to change
         // Likewise, tapping the checkbox on the screen will change LineItem's 'complete' field to the new value
-        NewAdapter adapter = new NewAdapter(this, items, R.layout.main_listview);
-        ListView listView = (ListView) findViewById(R.id.listview);
+        adapter = new NewAdapter(this, items, R.layout.main_listview);
+        listView = (ListView) findViewById(R.id.listview);
         listView.setAdapter(adapter);
 
-    }
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
 
-    // Method gets called whenever a list item is tapped (not called when checkbox is tapped though).
-    // Eventually, we need to make it so this method brings us to a "more info" screen.
-    public void clicked(View view) {
-        Log.i("bub", "" + items.get(0).isComplete());
+                // Grabs the appropriate item from our array
+                LineItem selected = adapter.getItem(position);
+                Log.i("bub", ""+selected.isComplete());
+            }
+        });
+
     }
 
     @Override
