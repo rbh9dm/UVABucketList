@@ -1,6 +1,7 @@
 package rbh9dm.cs2110.virginia.edu.androidproject;
 
 import android.app.LauncherActivity;
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -24,9 +25,11 @@ import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -40,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
     ListView listView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)  {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
             // R.raw.info refers to info.txt, the file we are reading from. It is located in res -> raw.
             InputStream is = this.getResources().openRawResource(R.raw.info);
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+
             if (is != null) {
                 // Checks whether we have reached the end of the file
                 while ((str = reader.readLine()) != null) {
@@ -65,7 +69,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
             is.close();
-        } catch(IOException e) {}
+        } catch (IOException e) {
+        }
 
         // Sets up the adapter and listView. This displays a list based on the contents of our LineItem array
         // Note: changing the contents of the array will cause the list on the screen to change
@@ -80,11 +85,12 @@ public class MainActivity extends AppCompatActivity {
 
                 // Grabs the appropriate item from our array
                 LineItem selected = adapter.getItem(position);
-                Log.i("bub", ""+selected.isComplete());
+                Log.i("bub", "" + selected.isComplete());
             }
         });
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
