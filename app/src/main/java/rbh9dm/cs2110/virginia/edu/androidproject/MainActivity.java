@@ -1,7 +1,6 @@
 package rbh9dm.cs2110.virginia.edu.androidproject;
 
 import android.app.LauncherActivity;
-import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -25,72 +24,81 @@ import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
+import android.content.Intent;
 
 public class MainActivity extends AppCompatActivity {
 
     /*
      * Array of LineItems. LineItems hold the data regarding each item on the list (i.e. name, description, whether complete)
      */
-    private ArrayList<LineItem> items;
+    public final static String EXTRA_MESSAGE = "com.mycompany.myfirstapp.MESSAGE";
+    public static ArrayList<LineItem> items = new ArrayList<>();
     NewAdapter adapter;
     ListView listView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Initialize items
-        items = new ArrayList<>();
-
         // Attempt to fill the array by reading in from the file
         // Data in the file is listed in the following order: item name, description, whether complete (1=complete, 0=incomplete)
-        try {
-            String str = "";
+        if(items.isEmpty()) {
+            try {
+                String str = "";
 
-            // R.raw.info refers to info.txt, the file we are reading from. It is located in res -> raw.
-            InputStream is = this.getResources().openRawResource(R.raw.info);
-            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-
-            if (is != null) {
-                // Checks whether we have reached the end of the file
-                while ((str = reader.readLine()) != null) {
-                    // Read the next three lines from the file to create a new LineItem
-                    LineItem item = new LineItem(str, reader.readLine(), Integer.parseInt(reader.readLine()));
-                    // Adds the new LineItem to our LineItem array
-                    items.add(item);
+                // R.raw.info refers to info.txt, the file we are reading from. It is located in res -> raw.
+                InputStream is = this.getResources().openRawResource(R.raw.info);
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                if (is != null) {
+                    // Checks whether we have reached the end of the file
+                    while ((str = reader.readLine()) != null) {
+                        // Read the next three lines from the file to create a new LineItem
+                        LineItem item = new LineItem(str, reader.readLine(), Integer.parseInt(reader.readLine()));
+                        // Adds the new LineItem to our LineItem array
+                        items.add(item);
+                    }
                 }
+                is.close();
+            } catch (IOException e) {
             }
-            is.close();
-        } catch (IOException e) {
+
+            // Sets up the adapter and listView. This displays a list based on the contents of our LineItem array
+            // Note: changing the contents of the array will cause the list on the screen to change
+            // Likewise, tapping the checkbox on the screen will change LineItem's 'complete' field to the new value
+            adapter = new NewAdapter(this, items, R.layout.main_listview);
+            listView = (ListView) findViewById(R.id.listview);
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View view,
+                                        int position, long id) {
+
+                    Intent intent = new Intent(MainActivity.this, Main2Activity.class);
+                    intent.putExtra(EXTRA_MESSAGE, position);
+                    startActivityForResult(intent, 0);
+                }
+            });
         }
-
-        // Sets up the adapter and listView. This displays a list based on the contents of our LineItem array
-        // Note: changing the contents of the array will cause the list on the screen to change
-        // Likewise, tapping the checkbox on the screen will change LineItem's 'complete' field to the new value
-        adapter = new NewAdapter(this, items, R.layout.main_listview);
-        listView = (ListView) findViewById(R.id.listview);
         listView.setAdapter(adapter);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-
-                // Grabs the appropriate item from our array
-                LineItem selected = adapter.getItem(position);
-                Log.i("bub", "" + selected.isComplete());
-            }
-        });
-
     }
 
+    // Method gets called whenever a list item is tapped (not called when checkbox is tapped though).
+    // Eventually, we need to make it so this method brings us to a "more info" screen.
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(data != null) {
+            int result = data.getIntExtra("id", 0);
+            if (result == 1) {
+                adapter.notifyDataSetChanged();
+            }
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

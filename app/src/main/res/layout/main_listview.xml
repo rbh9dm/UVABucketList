@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/container"
+    android:descendantFocusability="blocksDescendants"
     >
     <CheckBox android:id="@+id/chk"
         android:layout_alignParentLeft="true"
@@ -21,7 +21,10 @@
         android:textStyle="bold"
         android:layout_toRightOf="@id/chk"
         android:typeface="sans"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:textSize="@dimen/abc_text_size_medium_material"
         android:layout_centerVertical="true"
-        android:layout_margin="5dp" />
+        android:layout_margin="5dp"
+        android:layout_alignParentStart="false" />
 </RelativeLayout>
